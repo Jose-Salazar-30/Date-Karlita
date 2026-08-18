@@ -1,0 +1,560 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="theme-color" content="#f7edf1" />
+  <title>Nuestra cita 💕</title>
+  <style>
+    :root{
+      --bg:#fff8fb;
+      --card:#ffffff;
+      --text:#33272d;
+      --muted:#7a6971;
+      --accent:#b94d73;
+      --accent-soft:#f8dbe5;
+      --border:#efd9e1;
+      --shadow:0 18px 50px rgba(86,43,59,.12);
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      min-height:100vh;
+      font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at 15% 20%, #ffe6ef 0 10%, transparent 30%),
+        radial-gradient(circle at 90% 10%, #f4e7ff 0 8%, transparent 28%),
+        linear-gradient(180deg,#fffafd,#fff5f8);
+      display:grid;
+      place-items:center;
+      padding:24px;
+    }
+    .shell{width:min(760px,100%)}
+    .top{
+      text-align:center;
+      margin-bottom:16px;
+    }
+    .kicker{
+      font-size:.82rem;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      color:var(--accent);
+      font-weight:800;
+    }
+    h1{
+      margin:.35rem 0 .4rem;
+      font-size:clamp(2rem,7vw,3.5rem);
+      line-height:1.02;
+    }
+    .intro{
+      color:var(--muted);
+      max-width:610px;
+      margin:0 auto;
+      line-height:1.6;
+    }
+    .card{
+      background:rgba(255,255,255,.94);
+      border:1px solid rgba(239,217,225,.9);
+      border-radius:28px;
+      box-shadow:var(--shadow);
+      padding:clamp(22px,5vw,42px);
+      backdrop-filter:blur(10px);
+    }
+    .progress-wrap{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      margin-bottom:28px;
+    }
+    .progress{
+      flex:1;
+      height:9px;
+      border-radius:99px;
+      background:#f4e6eb;
+      overflow:hidden;
+    }
+    .progress > div{
+      height:100%;
+      width:0;
+      background:linear-gradient(90deg,#b94d73,#df7398);
+      transition:width .28s ease;
+    }
+    .step-count{
+      color:var(--muted);
+      font-size:.88rem;
+      white-space:nowrap;
+    }
+    .question h2{
+      font-size:clamp(1.45rem,5vw,2.15rem);
+      margin:0 0 8px;
+    }
+    .question p{
+      margin:0 0 24px;
+      color:var(--muted);
+      line-height:1.55;
+    }
+    .options{
+      display:grid;
+      gap:12px;
+    }
+    .option{
+      width:100%;
+      text-align:left;
+      border:1px solid var(--border);
+      background:#fff;
+      border-radius:18px;
+      padding:16px 17px;
+      font:inherit;
+      color:inherit;
+      cursor:pointer;
+      display:flex;
+      gap:14px;
+      align-items:flex-start;
+      transition:.18s ease;
+    }
+    .option:hover{
+      transform:translateY(-1px);
+      border-color:#dba9ba;
+      box-shadow:0 8px 22px rgba(86,43,59,.08);
+    }
+    .option.selected{
+      border-color:var(--accent);
+      background:#fff3f7;
+      box-shadow:0 0 0 3px rgba(185,77,115,.08);
+    }
+    .emoji{
+      width:38px;
+      height:38px;
+      border-radius:12px;
+      background:var(--accent-soft);
+      display:grid;
+      place-items:center;
+      flex:0 0 auto;
+      font-size:1.2rem;
+    }
+    .option strong{display:block;margin-bottom:2px}
+    .option small{display:block;color:var(--muted);line-height:1.35}
+    textarea{
+      width:100%;
+      min-height:140px;
+      resize:vertical;
+      border:1px solid var(--border);
+      border-radius:16px;
+      padding:14px 15px;
+      font:inherit;
+      outline:none;
+      color:var(--text);
+      background:#fff;
+    }
+    textarea:focus{
+      border-color:var(--accent);
+      box-shadow:0 0 0 3px rgba(185,77,115,.08);
+    }
+    .actions{
+      display:flex;
+      gap:10px;
+      justify-content:space-between;
+      margin-top:28px;
+    }
+    button.nav{
+      border:0;
+      border-radius:14px;
+      padding:13px 18px;
+      font:inherit;
+      font-weight:800;
+      cursor:pointer;
+    }
+    #backBtn{
+      background:#f6edf0;
+      color:#674b56;
+    }
+    #nextBtn,#sendBtn{
+      margin-left:auto;
+      background:var(--accent);
+      color:#fff;
+      box-shadow:0 8px 20px rgba(185,77,115,.22);
+    }
+    button:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
+    .review{
+      display:grid;
+      gap:10px;
+      margin:20px 0 4px;
+    }
+    .review-item{
+      background:#fff8fa;
+      border:1px solid var(--border);
+      border-radius:15px;
+      padding:13px 14px;
+    }
+    .review-item b{
+      display:block;
+      color:var(--accent);
+      font-size:.88rem;
+      margin-bottom:3px;
+    }
+    .success{
+      text-align:center;
+      padding:8px 0;
+    }
+    .success .big{font-size:4rem}
+    .success h2{font-size:2rem;margin:.35rem 0}
+    .success p{color:var(--muted);line-height:1.6}
+    .tiny{
+      text-align:center;
+      color:#9b858f;
+      font-size:.76rem;
+      margin-top:14px;
+    }
+    .hidden{display:none!important}
+    @media (max-width:520px){
+      body{padding:14px}
+      .card{border-radius:22px;padding:21px 17px}
+      .actions{position:sticky;bottom:10px;background:linear-gradient(transparent,rgba(255,255,255,.96) 26%);padding-top:20px}
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header class="top">
+      <div class="kicker">Una invitación especial ✨</div>
+      <h1 id="mainTitle">¿Diseñamos nuestra cita? 💕</h1>
+      <p class="intro" id="introText">
+        Quiero preparar una cena linda contigo, pero esta vez tú eliges los pequeños detalles.
+        No hay respuestas correctas: solo quiero saber qué te haría ilusión.
+      </p>
+    </header>
+
+    <section class="card">
+      <div id="quizView">
+        <div class="progress-wrap">
+          <div class="progress"><div id="progressBar"></div></div>
+          <div class="step-count" id="stepCount"></div>
+        </div>
+
+        <div class="question">
+          <h2 id="questionTitle"></h2>
+          <p id="questionSubtitle"></p>
+          <div id="options" class="options"></div>
+          <textarea id="textAnswer" class="hidden" placeholder="Escribe aquí lo que te gustaría... 💌"></textarea>
+        </div>
+
+        <div class="actions">
+          <button class="nav" id="backBtn" type="button">← Atrás</button>
+          <button class="nav" id="nextBtn" type="button">Siguiente →</button>
+        </div>
+      </div>
+
+      <div id="reviewView" class="hidden">
+        <div class="progress-wrap">
+          <div class="progress"><div style="width:100%"></div></div>
+          <div class="step-count">Listo 💗</div>
+        </div>
+        <div class="question">
+          <h2>Así se siente nuestra cita ✨</h2>
+          <p>Revísalo y, si te gusta, envíamelo. Prometo usarlo para preparar algo bonito.</p>
+          <div id="reviewList" class="review"></div>
+        </div>
+        <div class="actions">
+          <button class="nav" id="editBtn" type="button">← Cambiar algo</button>
+          <button class="nav" id="sendBtn" type="button">Enviar mis elecciones 💌</button>
+        </div>
+      </div>
+
+      <div id="successView" class="success hidden">
+        <div class="big">💗</div>
+        <h2>¡Respuesta enviada!</h2>
+        <p>
+          Gracias por ayudarme a imaginar nuestra cita. Ahora me toca a mí ponerle cariño
+          a los detalles. ✨
+        </p>
+      </div>
+    </section>
+
+    <p class="tiny">Hecho con cariño para una noche especial.</p>
+  </main>
+
+  <script>
+    // ==========================================================
+    // CONFIGURACIÓN RÁPIDA
+    // 1) Pega aquí la URL de tu Google Apps Script publicado.
+    // 2) Cambia los textos si deseas personalizar la página.
+    // ==========================================================
+    const CONFIG = {
+      appsScriptUrl: "PEGA_AQUI_TU_URL_DE_GOOGLE_APPS_SCRIPT",
+      titulo: "¿Diseñamos nuestra cita? 💕",
+      intro: "Quiero preparar una cena linda contigo, pero esta vez tú eliges los pequeños detalles. No hay respuestas correctas: solo quiero saber qué te haría ilusión."
+    };
+
+    document.getElementById("mainTitle").textContent = CONFIG.titulo;
+    document.getElementById("introText").textContent = CONFIG.intro;
+
+    const questions = [
+      {
+        id: "tipoLugar",
+        title: "Primero: ¿qué tipo de lugar te gustaría? 🍽️",
+        subtitle: "Piensa en dónde te sentirías más cómoda y feliz esa noche.",
+        options: [
+          ["🌿","Casual y bonito","Un lugar relajado, lindo y sin tanta formalidad."],
+          ["✨","Elegante","Un restaurante más especial, con ambiente de ocasión."],
+          ["🌙","Romántico e íntimo","Luces tenues, conversación tranquila y ambiente acogedor."],
+          ["🎲","Sorpréndeme","Tú eliges el lugar, yo solo quiero disfrutar contigo."]
+        ]
+      },
+      {
+        id: "vestimenta",
+        title: "¿Cómo quieres que nos vistamos? 👗",
+        subtitle: "La idea es que ambos disfrutemos también de arreglarnos para la ocasión.",
+        options: [
+          ["👟","Casual","Cómodos, lindos y sin preocuparnos demasiado."],
+          ["👔","Smart casual","Arreglados, pero todavía relajados."],
+          ["🥂","Formales","Que se sienta como una cita importante y especial."],
+          ["💞","Tú eliges por los dos","Confío en tu idea para el estilo de la noche."]
+        ]
+      },
+      {
+        id: "comida",
+        title: "¿Qué tipo de comida te provoca más? 😋",
+        subtitle: "No tiene que ser exacto; solo quiero conocer el mood de la cena.",
+        options: [
+          ["🍝","Italiana","Pasta, pizza, vino sin alcohol o algo muy acogedor."],
+          ["🍣","Asiática","Sushi, ramen, comida coreana o algo diferente."],
+          ["🥩","Parrilla / carnes","Una cena fuerte y clásica."],
+          ["🌮","Latina","Sabores conocidos, ricos y con ambiente alegre."],
+          ["🌎","Algo nuevo","Probemos una cocina que no solemos elegir."]
+        ]
+      },
+      {
+        id: "ambiente",
+        title: "¿Qué ambiente te gustaría para conversar? ✨",
+        subtitle: "Quiero que el lugar combine con cómo quieres sentir la noche.",
+        options: [
+          ["🕯️","Tranquilo y romántico","Poca bulla, luces suaves y mucho tiempo para hablar."],
+          ["🎶","Con música y ambiente","Algo vivo, bonito y con energía."],
+          ["🌃","Con una linda vista","Terraza, ciudad, jardín o un lugar visualmente especial."],
+          ["🤍","Acogedor","Pequeño, cómodo y con sensación de privacidad."]
+        ]
+      },
+      {
+        id: "ubicacion",
+        title: "¿Adentro o al aire libre? 🌙",
+        subtitle: "Otro detalle pequeño que puede cambiar mucho la experiencia.",
+        options: [
+          ["🏠","Adentro","Cómodos y sin depender del clima."],
+          ["🌿","Terraza o jardín","Aire fresco y un ambiente más especial."],
+          ["🌦️","Me da igual","Lo que combine mejor con el lugar."]
+        ]
+      },
+      {
+        id: "hora",
+        title: "¿A qué hora se siente mejor una cita para ti? 🕰️",
+        subtitle: "Para no ir con prisa y disfrutar bien la noche.",
+        options: [
+          ["🌇","Temprano","Tipo 6:00–7:00 p. m."],
+          ["🌙","Noche","Tipo 7:30–8:30 p. m."],
+          ["✨","Más tarde","Después de las 9:00 p. m."],
+          ["💌","Tú organízalo","El horario que mejor funcione con el plan."]
+        ]
+      },
+      {
+        id: "postre",
+        title: "Pregunta importante: ¿postre? 🍰",
+        subtitle: "Una cita bonita merece algo dulce… si tú quieres.",
+        options: [
+          ["🍫","Sí, chocolate","Algo intenso y delicioso."],
+          ["🍓","Sí, algo frutal","Más fresco y ligero."],
+          ["🍨","Helado","Nunca falla."],
+          ["☕","Café y conversación","Prefiero cerrar la cena con algo tranquilo."],
+          ["🙈","No es necesario","Mejor dejamos espacio para otra cosa."]
+        ]
+      },
+      {
+        id: "despues",
+        title: "Después de cenar, ¿qué te gustaría hacer? 🌃",
+        subtitle: "Podemos dejar que la cita termine en la mesa… o alargarla un poquito.",
+        options: [
+          ["🚶‍♀️","Dar una caminata","Hablar, caminar y disfrutar un rato más."],
+          ["☕","Ir por café o algo dulce","Una segunda parada tranquila."],
+          ["🎶","Música o paseo en carro","Solo nosotros y nuestras canciones."],
+          ["🎬","Algo espontáneo","Ver qué se nos antoja en ese momento."],
+          ["🏡","Cerrar la noche tranquilos","La cena es suficiente; lo importante es compartir."]
+        ]
+      },
+      {
+        id: "sorpresa",
+        title: "¿Cuánta sorpresa quieres que tenga la cita? 🎁",
+        subtitle: "Así sé cuánto contarte… y cuánto guardar en secreto.",
+        options: [
+          ["🗺️","Quiero saber el plan","Me gusta saber dónde vamos y qué haremos."],
+          ["💫","Mitad y mitad","Cuéntame lo básico y guarda un detalle sorpresa."],
+          ["🙈","Sorpréndeme bastante","Solo dime cómo vestirme y a qué hora estar lista."]
+        ]
+      },
+      {
+        id: "detalle",
+        title: "¿Qué detalle te haría sentir más especial? 🌷",
+        subtitle: "No es una promesa de spoiler… es inspiración.",
+        options: [
+          ["🌹","Flores","Un clásico que sigue siendo bonito."],
+          ["💌","Una carta o nota","Algo personal que pueda guardar."],
+          ["📸","Una foto bonita juntos","Un recuerdo de la noche."],
+          ["🎵","Una canción especial","Que la música también cuente algo."],
+          ["🤍","Solo tiempo contigo","Sin extras: presencia, conversación y cariño."]
+        ]
+      },
+      {
+        id: "mensaje",
+        title: "Y una última cosa… 💌",
+        subtitle: "Si hay algo que te gustaría para nuestra cita y no te pregunté, cuéntamelo aquí. También puedes dejarme un mensajito.",
+        type: "text"
+      }
+    ];
+
+    let current = 0;
+    const answers = {};
+
+    const el = {
+      questionTitle: document.getElementById("questionTitle"),
+      questionSubtitle: document.getElementById("questionSubtitle"),
+      options: document.getElementById("options"),
+      textAnswer: document.getElementById("textAnswer"),
+      backBtn: document.getElementById("backBtn"),
+      nextBtn: document.getElementById("nextBtn"),
+      progressBar: document.getElementById("progressBar"),
+      stepCount: document.getElementById("stepCount"),
+      quizView: document.getElementById("quizView"),
+      reviewView: document.getElementById("reviewView"),
+      successView: document.getElementById("successView"),
+      reviewList: document.getElementById("reviewList"),
+      editBtn: document.getElementById("editBtn"),
+      sendBtn: document.getElementById("sendBtn")
+    };
+
+    function render() {
+      const q = questions[current];
+      el.questionTitle.textContent = q.title;
+      el.questionSubtitle.textContent = q.subtitle;
+      el.stepCount.textContent = `${current + 1} de ${questions.length}`;
+      el.progressBar.style.width = `${((current + 1) / questions.length) * 100}%`;
+      el.backBtn.disabled = current === 0;
+
+      el.options.innerHTML = "";
+      el.textAnswer.classList.toggle("hidden", q.type !== "text");
+
+      if (q.type === "text") {
+        el.textAnswer.value = answers[q.id] || "";
+        el.nextBtn.textContent = "Ver resumen 💗";
+      } else {
+        el.nextBtn.textContent = "Siguiente →";
+        q.options.forEach(([emoji, label, desc]) => {
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "option" + (answers[q.id] === label ? " selected" : "");
+          btn.innerHTML = `
+            <span class="emoji">${emoji}</span>
+            <span><strong>${label}</strong><small>${desc}</small></span>
+          `;
+          btn.addEventListener("click", () => {
+            answers[q.id] = label;
+            [...el.options.children].forEach(x => x.classList.remove("selected"));
+            btn.classList.add("selected");
+          });
+          el.options.appendChild(btn);
+        });
+      }
+    }
+
+    function saveTextIfNeeded() {
+      const q = questions[current];
+      if (q.type === "text") answers[q.id] = el.textAnswer.value.trim();
+    }
+
+    function next() {
+      saveTextIfNeeded();
+      const q = questions[current];
+
+      if (q.type !== "text" && !answers[q.id]) {
+        alert("Elige una opción para continuar 💕");
+        return;
+      }
+
+      if (current < questions.length - 1) {
+        current++;
+        render();
+        window.scrollTo({top:0,behavior:"smooth"});
+      } else {
+        showReview();
+      }
+    }
+
+    function back() {
+      saveTextIfNeeded();
+      if (current > 0) {
+        current--;
+        render();
+      }
+    }
+
+    function showReview() {
+      el.quizView.classList.add("hidden");
+      el.reviewView.classList.remove("hidden");
+      el.reviewList.innerHTML = "";
+
+      questions.forEach(q => {
+        const div = document.createElement("div");
+        div.className = "review-item";
+        const label = q.title.replace(/[^\p{L}\p{N}\s¿?¡!,:…-]/gu,"").trim();
+        div.innerHTML = `<b>${label}</b><span>${answers[q.id] || "Sin comentario adicional"}</span>`;
+        el.reviewList.appendChild(div);
+      });
+      window.scrollTo({top:0,behavior:"smooth"});
+    }
+
+    async function sendAnswers() {
+      if (!CONFIG.appsScriptUrl || CONFIG.appsScriptUrl.includes("PEGA_AQUI")) {
+        alert("Falta configurar la URL de Google Apps Script. Revisa el archivo README.");
+        return;
+      }
+
+      el.sendBtn.disabled = true;
+      el.sendBtn.textContent = "Enviando… 💌";
+
+      const data = new URLSearchParams();
+      data.append("fecha", new Date().toLocaleString("es-GT"));
+      for (const [key, value] of Object.entries(answers)) {
+        data.append(key, value);
+      }
+
+      try {
+        await fetch(CONFIG.appsScriptUrl, {
+          method: "POST",
+          mode: "no-cors",
+          headers: {"Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"},
+          body: data.toString()
+        });
+
+        el.reviewView.classList.add("hidden");
+        el.successView.classList.remove("hidden");
+        window.scrollTo({top:0,behavior:"smooth"});
+      } catch (err) {
+        console.error(err);
+        alert("No pude enviar la respuesta. Revisa tu conexión o la configuración.");
+        el.sendBtn.disabled = false;
+        el.sendBtn.textContent = "Enviar mis elecciones 💌";
+      }
+    }
+
+    el.nextBtn.addEventListener("click", next);
+    el.backBtn.addEventListener("click", back);
+    el.editBtn.addEventListener("click", () => {
+      el.reviewView.classList.add("hidden");
+      el.quizView.classList.remove("hidden");
+      render();
+    });
+    el.sendBtn.addEventListener("click", sendAnswers);
+
+    render();
+  </script>
+</body>
+</html>
